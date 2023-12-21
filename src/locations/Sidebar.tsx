@@ -1,3 +1,4 @@
+import React from 'react';
 import { SidebarAppSDK } from '@contentful/app-sdk';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import { Button } from '@contentful/f36-components';
@@ -22,7 +23,7 @@ const Sidebar = () => {
     console.log(await status.text());
 
     sdk.notifier.success('Build started!  Review in vercel to confirm it has gone live.');
-  }}>Deploy Production</Button>;
+  }}>{parameters.vercelDeployButtonLabel || 'Deploy'}</Button>;
 };
 
 export default Sidebar;

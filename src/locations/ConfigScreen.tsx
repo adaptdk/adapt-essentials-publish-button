@@ -1,3 +1,4 @@
+import React from 'react';
 import { ConfigAppSDK } from '@contentful/app-sdk';
 import { Flex, Form, Heading, Paragraph, TextInput, TextLink, FormControl } from '@contentful/f36-components';
 import { /* useCMA, */ useSDK } from '@contentful/react-apps-toolkit';
@@ -6,12 +7,13 @@ import { useCallback, useEffect, useState } from 'react';
 
 export interface AppInstallationParameters {
   vercelDeployHook?: string,
+  vercelDeployButtonLabel?: string,
 }
 
 const ConfigScreen = () => {
+  const sdk = useSDK<ConfigAppSDK>();
   const [parameters, setParameters] = useState<AppInstallationParameters>({});
   const [invalid, setInvalid] = useState<boolean>(false);
-  const sdk = useSDK<ConfigAppSDK>();
 
   /*
      To use the cma, inject it as follows.
@@ -59,7 +61,6 @@ const ConfigScreen = () => {
       // Get current parameters of the app.
       // If the app is not installed yet, `parameters` will be `null`.
       const currentParameters: AppInstallationParameters | null = await sdk.app.getParameters();
-      console.log(currentParameters)
 
       if (currentParameters) {
         setParameters(currentParameters);
@@ -100,7 +101,7 @@ const ConfigScreen = () => {
               } else {
                 setInvalid(false);
               }
-              setParameters({vercelDeployHook: e.target.value})
+              setParameters({...parameters, vercelDeployHook: e.target.value})
             }}
           />
           <FormControl.HelpText>Your Vercel deploy hook</FormControl.HelpText>
@@ -109,7 +110,26 @@ const ConfigScreen = () => {
               This field is required
             </FormControl.ValidationMessage>
           )}
-      </FormControl>
+        </FormControl>
+        <FormControl>
+          <FormControl.Label>Button Label</FormControl.Label>
+          <TextInput
+            value={parameters.vercelDeployButtonLabel}
+            type="text"
+            name="vercelDeployButtonLabel"
+            placeholder="Deploy"
+            onChange={async (e) => {
+              const value = e.target.value.trim();
+              if (!value) {
+                setInvalid(true);
+              } else {
+                setInvalid(false);
+              }
+              setParameters({...parameters, vercelDeployButtonLabel: e.target.value})
+            }}
+          />
+          <FormControl.HelpText>The text for the deploy button</FormControl.HelpText>
+        </FormControl>
       </Form>
     </Flex>
   );
