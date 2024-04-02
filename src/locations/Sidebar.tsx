@@ -13,7 +13,7 @@ const Sidebar = () => {
     <>
       <Button isFullWidth isLoading={active} onClick={async () => {
         setActive(true);
-        const status = await fetch(parameters.vercelDeployHook, {
+        const status = await fetch(parameters.deployHook, {
           method: 'POST',
         });
         setActive(false);
@@ -22,11 +22,11 @@ const Sidebar = () => {
           sdk.notifier.error('Something went wrong!');
           return;
         }
-        sdk.notifier.success('Build started!  Review in vercel to confirm it has gone live.');
+        sdk.notifier.success('Build started!  Review in your hosting provider to confirm it has gone live.');
       }}>
-        {parameters.vercelDeployButtonLabel || 'Deploy'}
+        {parameters.deployButtonLabel || 'Deploy'}
       </Button>
-      <Paragraph marginTop="spacingS">Deploy your site to Vercel.  Please ensure that all content you need to go live is published.</Paragraph>
+      <Paragraph marginTop="spacingS">Deploy your site.  Please ensure that all content you need to go live is published.</Paragraph>
     </>
   );
 };

@@ -6,8 +6,8 @@ import { css } from 'emotion';
 import { useCallback, useEffect, useState } from 'react';
 
 export interface AppInstallationParameters {
-  vercelDeployHook?: string,
-  vercelDeployButtonLabel?: string,
+  deployHook?: string,
+  deployButtonLabel?: string,
 }
 
 const ConfigScreen = () => {
@@ -27,7 +27,7 @@ const ConfigScreen = () => {
     // for more details see https://www.contentful.com/developers/docs/extensibility/ui-extensions/sdk-reference/#register-an-app-configuration-hook
   
     // Perform validation.
-    if (!parameters.vercelDeployHook || !parameters.vercelDeployHook.trim()) {
+    if (!parameters.deployHook || !parameters.deployHook.trim()) {
       setInvalid(true);
       // Current state of the app is not valid.
       // Notify the user and return `false` so installation
@@ -75,24 +75,39 @@ const ConfigScreen = () => {
   return (
     <Flex flexDirection="column" className={css({ margin: '80px', maxWidth: '800px' })}>
       <Form>
-        <Heading>Vercel Deploy Configuration</Heading>
+        <Heading>Deploy Configuration</Heading>
         <Paragraph>
           Configure the deploy hook that will trigger your production environment to build.
-          For information about how to create a deploy hook, {' '}
-          <TextLink
-            target='_blank'
-            rel='noopener noreferrer'
-            href="https://vercel.com/docs/more/deploy-hooks"
-          >
-            refer to the Vercel documentation
-          </TextLink>.
+          For information about how to create a webhook, check with your hosting provider.
+          Common providers include: {' '}
+          <ul>
+            <li>
+              <TextLink
+                target='_blank'
+                rel='noopener noreferrer'
+                href="https://vercel.com/docs/more/deploy-hooks"
+              >
+                Vercel
+              </TextLink>
+            </li>
+            <li>
+              <TextLink
+                target='_blank'
+                rel='noopener noreferrer'
+                href="https://docs.netlify.com/configure-builds/build-hooks/"
+              >
+                Netlify
+              </TextLink>
+            </li>
+          </ul>
+
         </Paragraph>
         <FormControl isRequired isInvalid={invalid}>
           <FormControl.Label>Deploy Hook</FormControl.Label>
           <TextInput
-            value={parameters.vercelDeployHook}
+            value={parameters.deployHook}
             type="text"
-            name="vercelDeployHook"
+            name="deployHook"
             placeholder="https://api.vercel.com/v1/integrations/deploy/XXXX/XXXX"
             onChange={async (e) => {
               const value = e.target.value.trim();
@@ -101,7 +116,7 @@ const ConfigScreen = () => {
               } else {
                 setInvalid(false);
               }
-              setParameters({...parameters, vercelDeployHook: e.target.value})
+              setParameters({...parameters, deployHook: e.target.value})
             }}
           />
           <FormControl.HelpText>Your Vercel deploy hook</FormControl.HelpText>
@@ -114,9 +129,9 @@ const ConfigScreen = () => {
         <FormControl>
           <FormControl.Label>Button Label</FormControl.Label>
           <TextInput
-            value={parameters.vercelDeployButtonLabel}
+            value={parameters.deployButtonLabel}
             type="text"
-            name="vercelDeployButtonLabel"
+            name="deployButtonLabel"
             placeholder="Deploy"
             onChange={async (e) => {
               const value = e.target.value.trim();
@@ -125,7 +140,7 @@ const ConfigScreen = () => {
               } else {
                 setInvalid(false);
               }
-              setParameters({...parameters, vercelDeployButtonLabel: e.target.value})
+              setParameters({...parameters, deployButtonLabel: e.target.value})
             }}
           />
           <FormControl.HelpText>The text for the deploy button</FormControl.HelpText>
